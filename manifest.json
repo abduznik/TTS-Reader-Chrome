@@ -20,8 +20,10 @@
   },
   "commands": {
     "read-selection": {
-      "suggested_key": { "default": "Ctrl+Shift+U" },
-      "description": "Toggle Speak/Stop"
+      "suggested_key": {
+        "default": "Ctrl+Shift+U"
+      },
+      "description": "Toggle TTS (Start/Stop)"
     }
   }
 }

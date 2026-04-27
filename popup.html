@@ -3,7 +3,7 @@
 <head>
   <style>
     body { width: 220px; padding: 12px; font-family: sans-serif; display: flex; flex-direction: column; gap: 10px; }
-    select, button, input { width: 100%; cursor: pointer; }
+    select, button, input[type=range] { width: 100%; cursor: pointer; }
     .label-group { display: flex; justify-content: space-between; font-size: 0.85em; font-weight: bold; }
     .status { font-size: 0.75em; color: #666; text-align: center; margin-top: 5px; }
     hr { border: 0; border-top: 1px solid #eee; margin: 5px 0; }
@@ -11,17 +11,17 @@
 </head>
 <body>
   <strong>TTS Settings</strong>
-  
+
   <select id="voiceSelect"><option value="auto">Auto-Detect Language</option></select>
 
-  <div class="label-group"><span>Volume</span><span id="volVal">50%</span></div>
-  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+  <div class="label-group"><span>Volume</span><span id="volVal">100%</span></div>
+  <input type="range" id="volumeSlider" min="0" max="100" value="100">
 
   <div class="label-group"><span>Speed</span></div>
   <select id="rateSelect">
     <option value="0.5">Slow</option>
     <option value="1.0" selected>Normal</option>
-    <option value="2.0">Fast</option>
+    <option value="1.5">Fast</option>
   </select>
 
   <hr>

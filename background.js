@@ -17,7 +17,7 @@ const isHebrew = (text) => /[\u0590-\u05FF]/.test(text);
 async function getVoice(text, preferred) {
   const voices = await new Promise(r => chrome.tts.getVoices(r));
   if (preferred && preferred !== 'auto') return preferred;
-  
+
   const lang = isHebrew(text) ? 'he' : 'en';
   const match = voices.find(v => v.lang.startsWith(lang));
   return match ? match.voiceName : null;
@@ -34,26 +34,27 @@ async function toggleTTS() {
   if (!tab?.id) return;
 
   try {
-    const [{ result }] = await chrome.scripting.executeScript({
+    const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id },
       func: () => window.getSelection().toString(),
     });
 
-    const text = result?.trim();
+    const text = results?.[0]?.result?.trim();
     if (text) {
-      // Pull all settings from storage
       const settings = await chrome.storage.local.get({
         preferredVoice: 'auto',
-        volume: 0.5, // Defaulting to 50%
-        rate: 1.0    // Defaulting to "Normal"
+        volume: 1.0,
+        rate: 1.0
       });
 
-      const voice = await getVoice(text, settings.preferredVoice);
-      
+      const voice  = await getVoice(text, settings.preferredVoice);
+      const volume = parseFloat(settings.volume);
+      const rate   = parseFloat(settings.rate);
+
       chrome.tts.speak(text, {
         voiceName: voice,
-        volume: settings.volume,
-        rate: settings.rate,
+        volume: isNaN(volume) ? 1.0 : volume,
+        rate:   isNaN(rate)   ? 1.0 : rate,
         onEvent: (e) => {
           if (e.type === 'start') isSpeaking = true;
           if (['end', 'interrupted', 'error'].includes(e.type)) isSpeaking = false;
@@ -61,7 +62,9 @@ async function toggleTTS() {
       });
     }
   } catch (err) {
-    console.error("TTS Error:", err);
+    if (!err.message?.includes("Cannot access") && !err.message?.includes("not allowed")) {
+       console.error("TTS Error:", err);
+    }
     isSpeaking = false;
   }
 }
