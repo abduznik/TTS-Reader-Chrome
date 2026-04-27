@@ -39,13 +39,21 @@ async function toggleTTS() {
       func: () => window.getSelection().toString(),
     });
 
-    if (result?.trim()) {
-      const { preferredVoice } = await chrome.storage.local.get(['preferredVoice']);
-      const voice = await getVoice(result, preferredVoice);
+    const text = result?.trim();
+    if (text) {
+      // Pull all settings from storage
+      const settings = await chrome.storage.local.get({
+        preferredVoice: 'auto',
+        volume: 0.5, // Defaulting to 50%
+        rate: 1.0    // Defaulting to "Normal"
+      });
+
+      const voice = await getVoice(text, settings.preferredVoice);
       
-      chrome.tts.speak(result, {
+      chrome.tts.speak(text, {
         voiceName: voice,
-        rate: 1.0,
+        volume: settings.volume,
+        rate: settings.rate,
         onEvent: (e) => {
           if (e.type === 'start') isSpeaking = true;
           if (['end', 'interrupted', 'error'].includes(e.type)) isSpeaking = false;
@@ -53,6 +61,7 @@ async function toggleTTS() {
       });
     }
   } catch (err) {
+    console.error("TTS Error:", err);
     isSpeaking = false;
   }
 }

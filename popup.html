@@ -2,17 +2,32 @@
 <html>
 <head>
   <style>
-    body { width: 200px; padding: 10px; font-family: sans-serif; }
-    select, button { width: 100%; margin-top: 8px; cursor: pointer; }
-    .status { font-size: 0.8em; color: #666; margin-top: 5px; }
+    body { width: 220px; padding: 12px; font-family: sans-serif; display: flex; flex-direction: column; gap: 10px; }
+    select, button, input { width: 100%; cursor: pointer; }
+    .label-group { display: flex; justify-content: space-between; font-size: 0.85em; font-weight: bold; }
+    .status { font-size: 0.75em; color: #666; text-align: center; margin-top: 5px; }
+    hr { border: 0; border-top: 1px solid #eee; margin: 5px 0; }
   </style>
 </head>
 <body>
   <strong>TTS Settings</strong>
-  <select id="voiceSelect"><option>Loading voices...</option></select>
-  <button id="readBtn">Read Selected Text</button>
-  <button id="stopBtn">Stop Speaking</button>
-  <div class="status" id="status">Hotkey: Ctrl+Shift+U</div>
+  
+  <select id="voiceSelect"><option value="auto">Auto-Detect Language</option></select>
+
+  <div class="label-group"><span>Volume</span><span id="volVal">50%</span></div>
+  <input type="range" id="volumeSlider" min="0" max="100" value="50">
+
+  <div class="label-group"><span>Speed</span></div>
+  <select id="rateSelect">
+    <option value="0.5">Slow</option>
+    <option value="1.0" selected>Normal</option>
+    <option value="2.0">Fast</option>
+  </select>
+
+  <hr>
+  <button id="readBtn">Start / Stop</button>
+  <div class="status">Hotkey: Ctrl+Shift+U</div>
+
   <script src="popup.js"></script>
 </body>
 </html>
