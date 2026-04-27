@@ -1,18 +1,40 @@
-name: Package Extension
+name: Production Release
+
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
+  workflow_dispatch: # Allows you to trigger manually from the "Actions" tab
 
 jobs:
-  build:
+  build_and_release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # Needed to create the release and upload the zip
     steps:
-      - uses: actions/checkout@v4
-      - name: Zip Folder
-        run: zip -r tts-reader-v${{ github.run_number }}.zip . -x "*.git*" ".github*" "README.md"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
-          name: extension-zip
-          path: tts-reader-v${{ github.run_number }}.zip
+          fetch-depth: 0 # Fetches history so we can grab commit messages
+
+      - name: Extract Version
+        id: get_version
+        run: |
+          VERSION=$(jq -r '.version' manifest.json)
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Package Extension
+        run: |
+          zip -r tts-reader-v${{ steps.get_version.outputs.VERSION }}.zip . \
+          -x "*.git*" ".github*" "README.md" ".gitignore"
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the last commit message for the changelog
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          
+          gh release create "v${{ steps.get_version.outputs.VERSION }}" \
+            --title "Release v${{ steps.get_version.outputs.VERSION }}" \
+            --notes "### Changelog\n$COMMIT_MSG" \
+            "tts-reader-v${{ steps.get_version.outputs.VERSION }}.zip"
