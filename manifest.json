@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "TTS Reader",
+  "version": "1.0.0",
+  "description": "Simple text-to-speech reader with language auto-detection.",
+  "permissions": ["tts", "scripting", "activeTab", "storage", "contextMenus"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "logo.png"
+  },
+  "icons": {
+    "16": "logo.png",
+    "32": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png",
+    "512": "logo.png"
+  },
+  "commands": {
+    "read-selection": {
+      "suggested_key": { "default": "Ctrl+Shift+U" },
+      "description": "Toggle Speak/Stop"
+    }
+  }
+}

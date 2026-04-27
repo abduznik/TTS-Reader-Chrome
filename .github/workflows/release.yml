@@ -1,0 +1,18 @@
+name: Package Extension
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Zip Folder
+        run: zip -r tts-reader-v${{ github.run_number }}.zip . -x "*.git*" ".github*" "README.md"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: extension-zip
+          path: tts-reader-v${{ github.run_number }}.zip

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { width: 200px; padding: 10px; font-family: sans-serif; }
+    select, button { width: 100%; margin-top: 8px; cursor: pointer; }
+    .status { font-size: 0.8em; color: #666; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <strong>TTS Settings</strong>
+  <select id="voiceSelect"><option>Loading voices...</option></select>
+  <button id="readBtn">Read Selected Text</button>
+  <button id="stopBtn">Stop Speaking</button>
+  <div class="status" id="status">Hotkey: Ctrl+Shift+U</div>
+  <script src="popup.js"></script>
+</body>
+</html>
