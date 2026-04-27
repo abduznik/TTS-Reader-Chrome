@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TTS Reader",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Text-to-speech reader with language auto-detection, volume, and speed controls.",
   "permissions": ["tts", "scripting", "activeTab", "storage", "contextMenus"],
   "background": {
